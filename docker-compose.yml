@@ -24,6 +24,7 @@ services:
     depends_on:
       - db
     image: phpmyadmin/phpmyadmin
+    platform: linux/amd64
     restart: always
     env_file: .env
     ports:
@@ -66,7 +67,6 @@ services:
       - wordpress
     image: wordpress:cli
     env_file: .env
-    user: xfs
     command: >
       /bin/sh -c '
       sleep 30;
@@ -84,7 +84,7 @@ services:
         --skip-themes \
         --skip-plugins;
 
-      wp theme delete twentytwenty twentytwentyone twentytwentytwo --force;
+      wp theme delete twentytwentytwo --force;
       wp theme install "${WORDPRESS_THEMES_TO_INSTALL}";
       wp theme activate "${WORDPRESS_THEME_TO_ACTIVATE}";
 
