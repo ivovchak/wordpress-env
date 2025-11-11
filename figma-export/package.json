@@ -1,0 +1,18 @@
+{
+  "name": "wordpress-to-figma-exporter",
+  "version": "1.0.0",
+  "description": "Експорт WordPress компонентів в Figma",
+  "main": "component-extractor.js",
+  "scripts": {
+    "extract": "node component-extractor.js",
+    "serve": "npx http-server output -p 3001 -o"
+  },
+  "keywords": [
+    "wordpress",
+    "figma",
+    "components",
+    "design-tokens"
+  ],
+  "author": "",
+  "license": "MIT"
+}

@@ -1,0 +1,5 @@
+# Не комітити згенеровані файли
+output/
+
+# Node modules якщо будуть
+node_modules/
