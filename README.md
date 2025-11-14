@@ -2,12 +2,17 @@
 
 _"wordpress-env" is an environment for quickly, cleanly, and easily deploying a WordPress website with installed plugins and their corresponding data, all without the need for SQL dumps. Instead, it uses simple XML, CSV (in future will be add JSON and YAML) files for data management._
 
+## 📚 Documentation
 
-### The required software
-  1. **docker** - install from [docker.com](https://www.docker.com/) to prepare your system
+- **[AI Instructions](docs/AI-instructions.md)** - Guidelines for AI assistants (Claude Code, Cursor, Copilot)
+- **[Project Documentation](docs/README.md)** - Detailed technical documentation, FAQ, and resources
 
+## 🚀 Quick Start
 
-### How to setup and run
+### Required Software
+  1. **Docker** - install from [docker.com](https://www.docker.com/) to prepare your system
+
+### Setup and Run
 
   1. `git clone git@github.com:ivovchak/wordpress-env.git` - _clone this repository using the command_
   2. `cd wordpress-env` - _navigate to the cloned repository using the command_

@@ -1,0 +1,48 @@
+# Cursor AI Project Guidelines
+
+## 📚 Essential Documentation
+
+**READ IN THIS ORDER:**
+1. **[docs/AI-instructions.md](docs/AI-instructions.md)** ← START HERE
+2. [README.md](README.md) - Setup instructions
+3. [docs/README.md](docs/README.md) - Technical documentation
+
+## 🎯 Quick Reference
+
+### About
+WordPress environment for rapid deployment using XML/CSV instead of SQL dumps.
+
+### Tech Stack
+- Docker & Docker Compose
+- WordPress (latest)
+- MariaDB 11.5
+- Bash scripting
+- WP-CLI
+
+### Key Commands
+```bash
+alias dc="docker compose"
+dc up                      # Start
+dc down                    # Stop
+dc logs -f wordpress       # Logs
+./wp-cli.sh plugin list    # WP-CLI
+```
+
+### Core Rules
+- ✅ Commits in Ukrainian
+- ✅ Functional programming style
+- ✅ Test before submitting
+- ❌ Never commit `.env` with secrets (`.env.development` template is OK)
+- ❌ No SQL dumps (use XML/CSV)
+
+## 📖 Complete Guidelines
+
+For detailed information about:
+- Coding standards and style
+- Security best practices
+- Docker and WP-CLI commands
+- Git commit conventions
+- Testing procedures
+- Contribution workflow
+
+**See the complete guide:** [docs/AI-instructions.md](docs/AI-instructions.md)
