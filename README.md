@@ -6,6 +6,7 @@ _"wordpress-env" is an environment for quickly, cleanly, and easily deploying a 
 
 - **[AI Instructions](docs/AI-instructions.md)** - Guidelines for AI assistants (Claude Code, Cursor, Copilot)
 - **[Project Documentation](docs/README.md)** - Detailed technical documentation, FAQ, and resources
+- **[Private Repositories](docs/README.md#-working-with-private-repositories)** - How to use private plugins and themes from Git repositories
 
 ## 🚀 Quick Start
 

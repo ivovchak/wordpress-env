@@ -255,6 +255,13 @@ wordpress-env/
 **Add new plugin:**
 - Use `./wp-cli.sh plugin install plugin-name --activate`
 
+**Add private plugin/theme from Git:**
+- Add repository URL to `PRIVATE_PLUGIN_REPOS` or `PRIVATE_THEME_REPOS` in `.env`
+- Use `./wp-private-repos.sh clone` or restart containers with `dc up`
+
+**Update private repositories:**
+- Use `./wp-private-repos.sh update` to pull latest changes
+
 **View data storage:**
 - Run `dc volume ls` to see Docker volumes
 

@@ -208,6 +208,99 @@ Use for tabular data:
 - Products
 - Custom data
 
+## 🔐 Working with Private Repositories
+
+WordPress-ENV supports automatic cloning and installation of plugins and themes from private Git repositories (GitHub, GitLab, Bitbucket).
+
+### Prerequisites
+
+1. **SSH Key Setup:**
+   - Generate SSH key if you don't have one:
+     ```bash
+     ssh-keygen -t rsa -b 4096 -C "your_email@example.com"
+     ```
+   - Add public key to your Git hosting service (GitHub/GitLab/Bitbucket)
+   - SSH keys should be in `~/.ssh/` directory
+
+2. **Configure .env file:**
+   ```bash
+   # Git Configuration (optional)
+   GIT_USER_NAME="Your Name"
+   GIT_USER_EMAIL="your@email.com"
+
+   # Private Repositories
+   # Comma-separated list of Git repository URLs (SSH format)
+   PRIVATE_PLUGIN_REPOS="git@github.com:username/private-plugin.git,git@github.com:username/another-plugin.git"
+   PRIVATE_THEME_REPOS="git@github.com:username/private-theme.git"
+
+   # SSH Key Path (optional, defaults to ~/.ssh)
+   SSH_KEY_PATH="/home/username/.ssh"
+   ```
+
+### Using the Helper Script
+
+The project includes `wp-private-repos.sh` script for managing private repositories:
+
+```bash
+# Clone all private repositories specified in .env
+./wp-private-repos.sh clone
+
+# Update all private repositories (git pull)
+./wp-private-repos.sh update
+
+# List all cloned private repositories
+./wp-private-repos.sh list
+
+# Show help
+./wp-private-repos.sh help
+```
+
+### How It Works
+
+1. **Automatic Cloning:**
+   - During `docker compose up`, wp-cli container automatically:
+     - Installs git and openssh
+     - Configures SSH keys with proper permissions
+     - Adds known_hosts for GitHub, GitLab, and Bitbucket
+     - Clones specified private repositories into plugins/themes directories
+
+2. **Manual Cloning:**
+   - Use `./wp-private-repos.sh clone` to clone repos without restarting containers
+   - Repositories are cloned to `./plugins/` and `./themes/` directories
+
+3. **Updates:**
+   - Use `./wp-private-repos.sh update` to pull latest changes from all private repos
+
+### Supported Git Hosting Services
+
+- **GitHub:** `git@github.com:username/repo.git`
+- **GitLab:** `git@gitlab.com:username/repo.git`
+- **Bitbucket:** `git@bitbucket.org:username/repo.git`
+- **Custom Git Server:** `git@your-server.com:path/to/repo.git`
+
+### Security Notes
+
+- SSH keys are mounted as read-only volumes
+- Never commit your `.env` file with real repository URLs
+- Use `.env.development` as template only
+- Private repositories are listed in `.gitignore` automatically if in plugins/themes folders
+
+### Troubleshooting
+
+**Issue:** "Permission denied (publickey)"
+- Solution: Ensure SSH key is added to your Git hosting service
+- Check key permissions: `chmod 600 ~/.ssh/id_rsa`
+
+**Issue:** "Host key verification failed"
+- Solution: Add host to known_hosts:
+  ```bash
+  ssh-keyscan github.com >> ~/.ssh/known_hosts
+  ```
+
+**Issue:** Repository not cloning
+- Solution: Check repository URL format (should use SSH format: `git@...`)
+- Verify you have access to the private repository
+
 ## 🧪 Testing
 
 Before each commit:

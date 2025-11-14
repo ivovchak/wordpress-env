@@ -71,6 +71,49 @@ services:
       /bin/sh -c '
       sleep 30;
 
+      # Setup Git configuration if provided
+      if [ ! -z "$${GIT_USER_NAME}" ]; then
+        git config --global user.name "$${GIT_USER_NAME}";
+      fi;
+      if [ ! -z "$${GIT_USER_EMAIL}" ]; then
+        git config --global user.email "$${GIT_USER_EMAIL}";
+      fi;
+
+      # Setup SSH for private repositories
+      if [ -d "/root/.ssh" ] && [ -f "/root/.ssh/id_rsa" ]; then
+        chmod 700 /root/.ssh;
+        chmod 600 /root/.ssh/id_rsa;
+        ssh-keyscan github.com >> /root/.ssh/known_hosts 2>/dev/null;
+        ssh-keyscan gitlab.com >> /root/.ssh/known_hosts 2>/dev/null;
+        ssh-keyscan bitbucket.org >> /root/.ssh/known_hosts 2>/dev/null;
+      fi;
+
+      # Install git if not present
+      apk add --no-cache git openssh 2>/dev/null || true;
+
+      # Clone private repositories if specified
+      if [ ! -z "$${PRIVATE_PLUGIN_REPOS}" ]; then
+        echo "$${PRIVATE_PLUGIN_REPOS}" | tr "," "\n" | while read repo; do
+          if [ ! -z "$$repo" ]; then
+            plugin_name=$$(basename $$repo .git);
+            if [ ! -d "/var/www/html/wp-content/plugins/$$plugin_name" ]; then
+              git clone $$repo /var/www/html/wp-content/plugins/$$plugin_name || echo "Failed to clone $$repo";
+            fi;
+          fi;
+        done;
+      fi;
+
+      if [ ! -z "$${PRIVATE_THEME_REPOS}" ]; then
+        echo "$${PRIVATE_THEME_REPOS}" | tr "," "\n" | while read repo; do
+          if [ ! -z "$$repo" ]; then
+            theme_name=$$(basename $$repo .git);
+            if [ ! -d "/var/www/html/wp-content/themes/$$theme_name" ]; then
+              git clone $$repo /var/www/html/wp-content/themes/$$theme_name || echo "Failed to clone $$repo";
+            fi;
+          fi;
+        done;
+      fi;
+
       wp core install \
         --path="/var/www/html" \
         --url="${WORDPRESS_PROTOCOL}://${WORDPRESS_HOST}:${WORDPRESS_PORT}" \
@@ -102,12 +145,17 @@ services:
       WORDPRESS_DB_PASSWORD: ${DB_PASSWORD}
       WORDPRESS_TABLE_PREFIX: ${WORDPRESS_TABLE_PREFIX}
       WORDPRESS_DEBUG: ${WORDPRESS_DEBUG:-false}
+      GIT_USER_NAME: ${GIT_USER_NAME:-}
+      GIT_USER_EMAIL: ${GIT_USER_EMAIL:-}
+      PRIVATE_PLUGIN_REPOS: ${PRIVATE_PLUGIN_REPOS:-}
+      PRIVATE_THEME_REPOS: ${PRIVATE_THEME_REPOS:-}
       # WORDPRESS_CLI_CACHE_DIR: ${WORDPRESS_CLI_CACHE_DIR}
     volumes:
       - wp_data:/var/www/html:rw
       - ./data:/data:rw
       - ./plugins:/var/www/html/wp-content/plugins:rw
       - ./themes:/var/www/html/wp-content/themes:rw
+      - ${SSH_KEY_PATH:-~/.ssh}:/root/.ssh:ro
     networks:
       - wordpress-network
 
